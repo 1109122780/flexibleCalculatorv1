@@ -30,19 +30,21 @@ public class CalculatorController {
 
     @PostMapping("/chain")
     public CalculationResponse chainOperations(@RequestBody CalculationRequest[] requests) {
-        try{
+        Number lastResult = null;
+        try {
             for (CalculationRequest request : requests) {
-                if (request.getNum1() != null) {
-                    calculator.apply(request.getOperation(), request.getNum1());
+                if (request.getNum1() == null && lastResult != null) {
+                    lastResult = calculator.calculate(request.getOperation(), lastResult, request.getNum2());
+                } else {
+                    lastResult = calculator.calculate(request.getOperation(), request.getNum1(), request.getNum2());
                 }
-                calculator.apply(request.getOperation(), request.getNum2());
             }
-            return new CalculationResponse(calculator.getResult());
-        }catch (IllegalArgumentException | UnsupportedOperationException ex) {
+        } catch (IllegalArgumentException | UnsupportedOperationException ex) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage(), ex);
+        } finally {
+            calculator.reset(); // Reset after all operations are completed
         }
-        finally {
-            calculator.reset();
-        }
+        return new CalculationResponse(lastResult);
     }
+
 }
