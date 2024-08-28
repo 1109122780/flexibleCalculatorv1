@@ -26,11 +26,19 @@ public class Calculator {
     }
 
     public Calculator apply(Operation operation, Number value) {
-        this.currentValue = calculate(operation, this.currentValue, value);
+        if (currentValue == null) {
+            currentValue = value; // 初次操作时将currentValue设为value
+        } else {
+            currentValue = calculate(operation, currentValue, value); // 之后的操作使用currentValue
+        }
         return this;
     }
 
     public Number getResult() {
         return this.currentValue;
+    }
+
+    public void reset() {
+        this.currentValue = 0;
     }
 }

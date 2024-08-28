@@ -15,19 +15,28 @@ public class CalculatorController {
 
     @PostMapping("/calculate")
     public CalculationResponse calculate(@RequestBody CalculationRequest request) {
-        Number result = calculator.calculate(
-                request.getOperation(),
-                request.getNum1(),
-                request.getNum2()
-        );
-        return new CalculationResponse(result);
+        try{
+            Number result = calculator.calculate(request.getOperation(), request.getNum1(), request.getNum2());
+            return new CalculationResponse(result);
+        }
+        finally {
+            calculator.reset();
+        }
     }
 
     @PostMapping("/chain")
     public CalculationResponse chainOperations(@RequestBody CalculationRequest[] requests) {
-        for (CalculationRequest request : requests) {
-            calculator.apply(request.getOperation(), request.getNum2());
+        try{
+            for (CalculationRequest request : requests) {
+                if (request.getNum1() != null) {
+                    calculator.apply(request.getOperation(), request.getNum1());
+                }
+                calculator.apply(request.getOperation(), request.getNum2());
+            }
+            return new CalculationResponse(calculator.getResult());
         }
-        return new CalculationResponse(calculator.getResult());
+        finally {
+            calculator.reset();
+        }
     }
 }
