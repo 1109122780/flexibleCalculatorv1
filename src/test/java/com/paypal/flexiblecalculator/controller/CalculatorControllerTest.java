@@ -96,6 +96,47 @@ public class CalculatorControllerTest {
     }
 
     @Test
+    public void testVeryLargeNumberForAddition() throws Exception {
+        String requestBody = "{\"operation\": \"ADD\", \"num1\": \"9999999999999999999999999999999999999999999\", \"num2\": 1}";
+
+        mockMvc.perform(post("/api/v1/calculator/calculate")
+                        .contentType("application/json")
+                        .content(requestBody))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void testInvalidNumberFormatForSubtraction() throws Exception {
+        String requestBody = "{\"operation\": \"SUBTRACT\", \"num1\": \"abc123\", \"num2\": 1}";
+
+        mockMvc.perform(post("/api/v1/calculator/calculate")
+                        .contentType("application/json")
+                        .content(requestBody))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void testVeryLargeNumberForMultiplication() throws Exception {
+        String requestBody = "{\"operation\": \"MULTIPLY\", \"num1\": \"9999999999999999999999999999999999999999999\", \"num2\": 2}";
+
+        mockMvc.perform(post("/api/v1/calculator/calculate")
+                        .contentType("application/json")
+                        .content(requestBody))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void testInvalidNumberFormatForDivision() throws Exception {
+        String requestBody = "{\"operation\": \"DIVIDE\", \"num1\": \"not_a_number\", \"num2\": 1}";
+
+        mockMvc.perform(post("/api/v1/calculator/calculate")
+                        .contentType("application/json")
+                        .content(requestBody))
+                .andExpect(status().isBadRequest());
+    }
+
+
+    @Test
     public void testCalculatorStateReset() throws Exception {
         // Perform an operation
         String requestBody1 = "{\"operation\": \"ADD\", \"num1\": 5, \"num2\": 3}";

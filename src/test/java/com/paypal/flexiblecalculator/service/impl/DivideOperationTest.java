@@ -2,6 +2,8 @@ package com.paypal.flexiblecalculator.service.impl;
 
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class DivideOperationTest {
@@ -10,7 +12,7 @@ class DivideOperationTest {
     void testDivision() {
         DivideOperation divideOperation = new DivideOperation();
         Number result = divideOperation.execute(6, 3);
-        assertEquals(2.0, result);
+        assertEquals(new BigDecimal("2"), result);
     }
 
     @Test

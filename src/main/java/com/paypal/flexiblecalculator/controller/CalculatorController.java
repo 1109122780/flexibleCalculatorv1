@@ -20,8 +20,6 @@ public class CalculatorController {
         try{
             Number result = calculator.calculate(request.getOperation(), request.getNum1(), request.getNum2());
             return new CalculationResponse(result);
-        }catch (IllegalArgumentException | UnsupportedOperationException ex) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage(), ex);
         }
         finally {
             calculator.reset();
@@ -39,8 +37,6 @@ public class CalculatorController {
                     lastResult = calculator.calculate(request.getOperation(), request.getNum1(), request.getNum2());
                 }
             }
-        } catch (IllegalArgumentException | UnsupportedOperationException ex) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage(), ex);
         } finally {
             calculator.reset(); // Reset after all operations are completed
         }
