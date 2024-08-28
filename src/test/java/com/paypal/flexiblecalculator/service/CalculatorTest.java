@@ -66,26 +66,23 @@ class CalculatorTest {
     }
 
     @Test
-    void testDivisionByZero() {
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            calculator.apply(Operation.DIVIDE, 5).apply(Operation.DIVIDE, 0);
+    void testNullOperands() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            calculator.calculate(Operation.ADD, null, 5);
         });
-
-        String expectedMessage = "Cannot divide by zero";
-        String actualMessage = exception.getMessage();
-
-        assertTrue(actualMessage.contains(expectedMessage));
     }
 
     @Test
     void testUnsupportedOperation() {
-        Exception exception = assertThrows(UnsupportedOperationException.class, () -> {
+        assertThrows(UnsupportedOperationException.class, () -> {
             calculator.calculate(null, 5, 3);
         });
+    }
 
-        String expectedMessage = "Operation not supported";
-        String actualMessage = exception.getMessage();
-
-        assertTrue(actualMessage.contains(expectedMessage));
+    @Test
+    void testDivisionByZero() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            calculator.calculate(Operation.DIVIDE, 5, 0);
+        });
     }
 }

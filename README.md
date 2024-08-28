@@ -13,6 +13,36 @@ The Flexible Calculator is a Java-based, Spring Boot-powered application that pr
 - **IoC Compatibility**: The application is designed to be compatible with Inversion of Control (IoC) principles, allowing for easy dependency injection and testing.
 - **Automatic Reset**: The calculator resets after each API call to ensure independent calculations for every request.
 
+## Design principles 
+
+### 1. **Open-Closed Principle (OCP)**
+
+The Open-Closed Principle states that software entities  should be open for extension but closed for modification. 
+
+**How OCP is Satisfied:**
+
+- **OperationStrategy Interface and Strategy Pattern:** The `OperationStrategy` interface is designed to allow new operations to be added by simply creating new classes that implement this interface (e.g., `AddOperation`, `SubtractOperation`, `MultiplyOperation`, `DivideOperation`). 
+- **Extensibility:** To add a new operation, such as modulo or exponentiation, we just need to create a new class implementing the `OperationStrategy` interface. The existing code in the `Calculator` class remains unchanged, fulfilling the Open-Closed Principle.
+
+### 2. **Maintainability**
+
+Maintainability refers to how easily software can be understood, corrected, adapted, and enhanced.
+
+**How Maintainability is Satisfied:**
+
+- **Modular Design:** The separation of concerns between different components ensures that each class has a clear responsibility. This modular design makes the code easier to maintain.
+- **Clear and Consistent Structure:** The project is organized in a clear and consistent structure, with logical separation between the model, service, and controller layers.
+- **Test Coverage:** Comprehensive unit tests help ensure that changes made to the codebase do not introduce regressions.
+
+### 3. **Extensibility**
+
+Extensibility refers to the ability of the software to be extended with new functionality without major modifications to the existing code.
+
+**How Extensibility is Satisfied:**
+
+- **Adding New Operations:** As mentioned under OCP, new operations can be added by simply creating new classes that implement the `OperationStrategy` interface. The `Calculator` class doesn’t need to be modified to support new operations, which makes it highly extensible.
+- **Configuration Flexibility:** With the use of Spring's IoC container, dependencies can be injected and managed externally, which means different implementations can be swapped or added without changing the core logic of the `Calculator` class.
+
 ## Installation and Setup
 
 **Clone the Repository**
@@ -81,12 +111,9 @@ The API will be available at `http://localhost:8080/api/v1/calculator`.
 
 - **Initial Value for Chaining**: When chaining operations, the first operation’s `num1` is used as the initial value. For subsequent operations, `num1` can be `null`, in which case the result of the previous operation is used as `num1`.
 - **Division by Zero**: The application will throw an `IllegalArgumentException` if an attempt is made to divide by zero.
+- **Unsupported Operations**: The application will throw an `UnsupportedOperationException` if an unsupported operation is assigned.
 - **Reset After Each Request**: The calculator automatically resets its current value after each API call to ensure independent calculations for each request.
-
-## Design Decisions
-
-- **Operation Strategy Pattern**: The operations (`Add`, `Subtract`, `Multiply`, `Divide`) are implemented using the Strategy design pattern. This makes the calculator extensible, allowing new operations to be added with minimal changes to the existing codebase.
-- **IoC Compatibility**: The application is designed with Spring’s IoC container, ensuring that all dependencies are injected and managed by Spring. This also allows for easy unit testing and swapping of components.
+- **Null Input Handling**: The application will throw an `IllegalArgumentException` if any of the input numbers (`num1` or `num2`) are `null` during a calculation, except in cases where `num1` is expected to be `null` as part of chaining logic.
 
 ## Testing
 

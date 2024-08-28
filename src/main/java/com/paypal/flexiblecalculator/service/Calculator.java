@@ -18,6 +18,9 @@ public class Calculator {
     }
 
     public Number calculate(Operation operation, Number num1, Number num2) {
+        if (num1 == null || num2 == null) {
+            throw new IllegalArgumentException("Operands must not be null");
+        }
         OperationStrategy strategy = operationStrategies.get(operation);
         if (strategy == null) {
             throw new UnsupportedOperationException("Operation not supported");
@@ -27,9 +30,9 @@ public class Calculator {
 
     public Calculator apply(Operation operation, Number value) {
         if (currentValue == null) {
-            currentValue = value; // 初次操作时将currentValue设为value
+            currentValue = value;
         } else {
-            currentValue = calculate(operation, currentValue, value); // 之后的操作使用currentValue
+            currentValue = calculate(operation, currentValue, value);
         }
         return this;
     }
